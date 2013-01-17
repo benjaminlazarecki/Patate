@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Patate\PatateCommand\Command;
+namespace Patate\Command;
 
-use Patate\PatateCommand\Model\PullRequest as Process;
+use Patate\Model\PullRequest as Process;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

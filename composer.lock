@@ -1,5 +1,5 @@
 {
-    "hash": "a3345e8ab4c310a0c19a98a13814cbdb",
+    "hash": "cc6c9464db26f54fb76b28063623280c",
     "packages": [
         {
             "name": "knplabs/github-api",
@@ -108,18 +108,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console",
-                "reference": "5a46888e178b84d9578a1f460580190d35200756"
+                "reference": "e9824f38bbce58d13b4a2538d275fa8c5ce4cda6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Console/archive/5a46888e178b84d9578a1f460580190d35200756.zip",
-                "reference": "5a46888e178b84d9578a1f460580190d35200756",
+                "url": "https://github.com/symfony/Console/archive/e9824f38bbce58d13b4a2538d275fa8c5ce4cda6.zip",
+                "reference": "e9824f38bbce58d13b4a2538d275fa8c5ce4cda6",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-16 09:27:54",
+            "time": "2013-01-17 15:20:05",
             "type": "library",
             "autoload": {
                 "psr-0": {

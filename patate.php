@@ -12,7 +12,7 @@
 
 include_once 'vendor/autoload.php';
 
-use Patate\PatateCommand\Command\PullRequest;
+use Patate\Command\PullRequest;
 use Symfony\Component\Console\Application;
 
 $application = new Application();

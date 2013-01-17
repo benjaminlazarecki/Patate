@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Patate\PatateCommand\Model;
+namespace Patate\Model;
 
 use Github\Api\Issue;
 use Github\Client;
