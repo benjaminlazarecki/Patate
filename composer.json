@@ -1,0 +1,24 @@
+{
+    "name": "patate/patate-command",
+    "description": "Provide some commands to execute phpcs on github repository",
+    "keywords": [ "patate", "command", "phpcs", "github", "pull-request" ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Benjamin Lazarecki",
+            "email": "benjamin.lazarecki@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/console": "2.1.*@dev",
+        "knplabs/github-api": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Patate\\PatateCommand": "src"
+        }
+    },
+    "target-dir": "Patate/PatateCommand",
+    "minimum-stability": "dev"
+}
