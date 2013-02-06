@@ -1,8 +1,18 @@
 <?php
 
+/*
+ * This file is part of the Patate command package.
+ *
+ * (c) Benjamin Lazarecki <benjamin.lazarecki@gmail.com>
+ *
+ * For the full copyright and license information, please read the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Patate\Fetcher;
 
-use Patate\Client\Client;
+use Github\Client;
+use Github\Exception\RuntimeException;
 use Patate\Target\Target;
 
 /**
@@ -13,7 +23,7 @@ use Patate\Target\Target;
 class PullRequestFetcher
 {
     /**
-     * @var \Patate\Client\Client
+     * @var \Github\Client
      */
     protected $client;
 
@@ -25,7 +35,7 @@ class PullRequestFetcher
     /**
      * Constructor.
      *
-     * @param \Patate\Client\Client $client The client.
+     * @param \Github\Client        $client The client.
      * @param \Patate\Target\Target $target The target.
      */
     public function __construct(Client $client, Target $target)
@@ -37,7 +47,7 @@ class PullRequestFetcher
     /**
      * Gets the client.
      *
-     * @return \Patate\Client\Client
+     * @return \Github\Client
      */
     public function getClient()
     {
@@ -47,7 +57,7 @@ class PullRequestFetcher
     /**
      * Gets the target.
      *
-     * @return \Patate\Target\Target
+     * @return \Github\Client
      */
     public function getTarget()
     {
@@ -69,18 +79,22 @@ class PullRequestFetcher
         $contents = array();
         foreach ($files as $file) {
             $filename = $file['filename'];
-            $extension = explode('.', $filename)[count(explode('.', $filename)) - 1];
+            $extension = explode('.', $filename);
+            $extension = $extension[count(explode('.', $filename)) - 1];
 
             if ($extension !== 'php') {
                 continue;
             }
 
-            $contents[] = $this->getClient()->getHttpClient()->get(sprintf('repos/%s/%s/contents/%s?ref=%s',
-                $username,
-                $repository,
-                $file['filename'],
-                $pullRequest['head']['sha']
-            ));
+            try {
+                $contents[$filename] = $this->getClient()->getHttpClient()->get(sprintf('repos/%s/%s/contents/%s?ref=%s',
+                    $username,
+                    $repository,
+                    $filename,
+                    $pullRequest['head']['sha']
+                ))->getContent();
+            } catch (RuntimeException $e) {
+            }
         }
 
         return $contents;

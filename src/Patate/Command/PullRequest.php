@@ -11,11 +11,7 @@
 
 namespace Patate\Command;
 
-use Patate\Fetcher\PullRequestFetcher;
-use Patate\Model\PhpCodeSniffer;
-use Patate\Report\PhpCsReport;
-use Patate\Storage\Filesystem;
-use Patate\Target\Target;
+use Patate\Patate;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,6 +26,21 @@ use Github\Client;
  */
 class PullRequest extends Command
 {
+    /** @var \Patate\Patate */
+    protected $patate;
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param Patate $patate The patate.
+     */
+    public function __construct($name, Patate $patate)
+    {
+        parent::__construct(null);
+
+        $this->patate = $patate;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -50,34 +61,14 @@ class PullRequest extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $username = $input->getArgument('username');
-        $repository = $input->getArgument('repository');
-        $pullRequestId = $input->getArgument('pull-request');
-        $login = $input->getOption('login');
-        $password = $input->getOption('password');
+        $this->patate->setArgs(array(
+            'username'     => $input->getArgument('username'),
+            'repository'   => $input->getArgument('repository'),
+            'pull_request' => $input->getArgument('pull-request'),
+            'login'        => $input->getOption('login'),
+            'password'     => $input->getOption('password'),
+        ));
 
-        $client = new \Patate\Client\Client();
-        $client->authenticate($login, $password, Client::AUTH_HTTP_PASSWORD);
-
-        $target = new Target();
-        $target
-            ->setUsername($username)
-            ->setRepository($repository)
-            ->setPullRequestId($pullRequestId);
-
-        $prFetcher = new PullRequestFetcher($client, $target);
-        $contents = $prFetcher->fetch();
-
-        $fs = new Filesystem();
-        $fs->writeAll($contents);
-
-        $phpcs = new PhpCodeSniffer();
-        $results = $phpcs->execute($fs->getIdentifiers());
-
-        $report = new PhpCsReport($results);
-
-        echo $report->format('text');
-
-        $fs->clearAll();
+        $this->patate->run();
     }
 }

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Patate command package.
+ *
+ * (c) Benjamin Lazarecki <benjamin.lazarecki@gmail.com>
+ *
+ * For the full copyright and license information, please read the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Patate\Storage;
 
 /**
@@ -31,8 +40,8 @@ class Filesystem
      */
     public function writeAll($contents)
     {
-        foreach ($contents as $content) {
-            $this->identifiers[] = $this->write($content);
+        foreach ($contents as $filename => $content) {
+            $this->identifiers[$filename] = $this->write($content);
         }
     }
 
@@ -57,7 +66,7 @@ class Filesystem
     {
         $identifier = uniqid('patate_');
 
-        file_put_contents('/tmp/' . $identifier, $content);
+        file_put_contents(sprintf('%s/%s', sys_get_temp_dir(), $identifier), $content);
 
         return $identifier;
     }
@@ -69,6 +78,6 @@ class Filesystem
      */
     public function clear($identifier)
     {
-        unlink('/tmp/' . $identifier);
+        unlink(sprintf('%s/%s',sys_get_temp_dir(), $identifier));
     }
 }

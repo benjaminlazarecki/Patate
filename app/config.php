@@ -9,14 +9,4 @@
  * file that was distributed with this source code.
  */
 
-namespace Patate\Exception;
-
-/**
- * The patate exceptions.
- *
- * @author Benjamin Lazarecki <benjamin.lazarecki@gmail.com>
- */
-class PatateException extends \Exception
-{
-
-}
+$container['client.headers'] = array('Accept: application/vnd.github-blob.raw');

@@ -1,18 +1,27 @@
 <?php
 
+/*
+ * This file is part of the Patate command package.
+ *
+ * (c) Benjamin Lazarecki <benjamin.lazarecki@gmail.com>
+ *
+ * For the full copyright and license information, please read the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Patate\Tests\Fetcher;
+
+use Patate\Fetcher\PullRequestFetcher;
 
 /**
  * Test for PullRequestFetcher.
  *
  * @author Benjamin Lazarecki <benjamin.lazarecki@gmail.com>
  */
-use Patate\Fetcher\PullRequestFetcher;
-
 class PullRequestFetcherTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Patate\Client\Client
+     * @var \Github\Client
      */
     protected $client;
 
@@ -26,7 +35,7 @@ class PullRequestFetcherTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->client = $this->getMock('Patate\Client\Client');
+        $this->client = $this->getMock('Github\Client');
         $this->target = $this->getMock('Patate\Target\Target');
     }
 
