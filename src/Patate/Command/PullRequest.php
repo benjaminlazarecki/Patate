@@ -11,7 +11,11 @@
 
 namespace Patate\Command;
 
-use Patate\Model\PullRequest as Process;
+use Patate\Fetcher\PullRequestFetcher;
+use Patate\Model\PhpCodeSniffer;
+use Patate\Report\PhpCsReport;
+use Patate\Storage\Filesystem;
+use Patate\Target\Target;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,8 +42,7 @@ class PullRequest extends Command
             ->addArgument('repository', InputArgument::REQUIRED, 'The repository')
             ->addArgument('pull-request', InputArgument::REQUIRED, 'The pull request number')
             ->addOption('login', null, InputOption::VALUE_REQUIRED, 'Your login')
-            ->addOption('password', null, InputOption::VALUE_REQUIRED, 'Your password')
-            ->addOption('no-comment', null, InputOption::VALUE_NONE, 'If set the report will not be comment');
+            ->addOption('password', null, InputOption::VALUE_REQUIRED, 'Your password');
     }
 
     /**
@@ -47,21 +50,34 @@ class PullRequest extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $pullRequest = new Process($input);
+        $username = $input->getArgument('username');
+        $repository = $input->getArgument('repository');
+        $pullRequestId = $input->getArgument('pull-request');
+        $login = $input->getOption('login');
+        $password = $input->getOption('password');
 
-        try {
-            $pullRequest->process();
-        } catch (RuntimeException $e) {
-            $output->writeln('<error>Sorry! There is a problem with your command. Plz check your args</error>');
+        $client = new \Patate\Client\Client();
+        $client->authenticate($login, $password, Client::AUTH_HTTP_PASSWORD);
 
-            die;
-        }
+        $target = new Target();
+        $target
+            ->setUsername($username)
+            ->setRepository($repository)
+            ->setPullRequestId($pullRequestId);
 
-        if ($pullRequest->hasErrors()) {
-            $output->writeln(sprintf('<error>%s</error>', $pullRequest->getMessage()));
-            $output->write($pullRequest->getReport());
-        } else {
-            $output->writeln(sprintf('<info>%s</info>', $pullRequest->getMessage()));
-        }
+        $prFetcher = new PullRequestFetcher($client, $target);
+        $contents = $prFetcher->fetch();
+
+        $fs = new Filesystem();
+        $fs->writeAll($contents);
+
+        $phpcs = new PhpCodeSniffer();
+        $results = $phpcs->execute($fs->getIdentifiers());
+
+        $report = new PhpCsReport($results);
+
+        echo $report->format('text');
+
+        $fs->clearAll();
     }
 }
