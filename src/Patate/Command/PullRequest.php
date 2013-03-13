@@ -11,7 +11,7 @@
 
 namespace Patate\Command;
 
-use Patate\Model\PullRequest as Process;
+use Patate\Patate;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,6 +26,21 @@ use Github\Client;
  */
 class PullRequest extends Command
 {
+    /** @var \Patate\Patate */
+    protected $patate;
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param Patate $patate The patate.
+     */
+    public function __construct($name, Patate $patate)
+    {
+        parent::__construct(null);
+
+        $this->patate = $patate;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -38,8 +53,7 @@ class PullRequest extends Command
             ->addArgument('repository', InputArgument::REQUIRED, 'The repository')
             ->addArgument('pull-request', InputArgument::REQUIRED, 'The pull request number')
             ->addOption('login', null, InputOption::VALUE_REQUIRED, 'Your login')
-            ->addOption('password', null, InputOption::VALUE_REQUIRED, 'Your password')
-            ->addOption('no-comment', null, InputOption::VALUE_NONE, 'If set the report will not be comment');
+            ->addOption('password', null, InputOption::VALUE_REQUIRED, 'Your password');
     }
 
     /**
@@ -47,21 +61,14 @@ class PullRequest extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $pullRequest = new Process($input);
+        $this->patate->setArgs(array(
+            'username'     => $input->getArgument('username'),
+            'repository'   => $input->getArgument('repository'),
+            'pull_request' => $input->getArgument('pull-request'),
+            'login'        => $input->getOption('login'),
+            'password'     => $input->getOption('password'),
+        ));
 
-        try {
-            $pullRequest->process();
-        } catch (RuntimeException $e) {
-            $output->writeln('<error>Sorry! There is a problem with your command. Plz check your args</error>');
-
-            die;
-        }
-
-        if ($pullRequest->hasErrors()) {
-            $output->writeln(sprintf('<error>%s</error>', $pullRequest->getMessage()));
-            $output->write($pullRequest->getReport());
-        } else {
-            $output->writeln(sprintf('<info>%s</info>', $pullRequest->getMessage()));
-        }
+        $this->patate->run();
     }
 }
