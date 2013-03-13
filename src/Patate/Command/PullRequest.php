@@ -52,8 +52,7 @@ class PullRequest extends Command
             ->addArgument('username', InputArgument::REQUIRED, 'The username')
             ->addArgument('repository', InputArgument::REQUIRED, 'The repository')
             ->addArgument('pull-request', InputArgument::REQUIRED, 'The pull request number')
-            ->addOption('login', null, InputOption::VALUE_REQUIRED, 'Your login')
-            ->addOption('password', null, InputOption::VALUE_REQUIRED, 'Your password');
+            ->addOption('login', null, InputOption::VALUE_REQUIRED, 'Your login');
     }
 
     /**
@@ -61,12 +60,15 @@ class PullRequest extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $dialog = $this->getHelperSet()->get('dialog');
+        $password = $dialog->askHiddenResponse($output, 'Password: ');
+
         $this->patate->setArgs(array(
             'username'     => $input->getArgument('username'),
             'repository'   => $input->getArgument('repository'),
             'pull_request' => $input->getArgument('pull-request'),
             'login'        => $input->getOption('login'),
-            'password'     => $input->getOption('password'),
+            'password'     => $password,
         ));
 
         $this->patate->run();

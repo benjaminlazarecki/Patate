@@ -78,6 +78,6 @@ class Filesystem
      */
     public function clear($identifier)
     {
-        unlink(sprintf('%s/%s',sys_get_temp_dir(), $identifier));
+        unlink(sprintf('%s/%s', sys_get_temp_dir(), $identifier));
     }
 }

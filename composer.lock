@@ -1,5 +1,5 @@
 {
-    "hash": "3d3f1de3b151cafcc370db9b687bbad7",
+    "hash": "8f993efaefab986072829047075406c8",
     "packages": [
         {
             "name": "knplabs/github-api",
@@ -152,26 +152,31 @@
         },
         {
             "name": "symfony/console",
-            "version": "2.1.x-dev",
+            "version": "dev-master",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "256b00333ab08ce1f6264152b22e08e4138275eb"
+                "reference": "aa28bbe2c3c4210f9e9f44df16d71d63c53adf9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/256b00333ab08ce1f6264152b22e08e4138275eb",
-                "reference": "256b00333ab08ce1f6264152b22e08e4138275eb",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/aa28bbe2c3c4210f9e9f44df16d71d63c53adf9b",
+                "reference": "aa28bbe2c3c4210f9e9f44df16d71d63c53adf9b",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
-                    "Symfony\\Component\\Console": ""
+                    "Symfony\\Component\\Console\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -190,7 +195,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-01 16:50:10"
+            "time": "2013-03-06 17:50:21"
         },
         {
             "name": "symfony/process",
