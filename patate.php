@@ -12,9 +12,15 @@
 
 include_once 'vendor/autoload.php';
 
-use Patate\Command\PullRequest;
-use Symfony\Component\Console\Application;
+/* START CONTAINER */
 
-$application = new Application();
-$application->add(new PullRequest());
-$application->run();
+$container = new Pimple();
+
+require __DIR__ . '/app/config.php';
+require __DIR__ . '/app/services.php';
+
+/* END CONTAINER */
+
+/* @var \Symfony\Component\Console\Application $app */
+$app = $container['app'];
+$app->run();
